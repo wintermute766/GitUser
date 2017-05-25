@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 public class UserActivity extends AppCompatActivity {
 
+    private UserStorage mUserStorage;
+
     private static final int USER_LOADER_ID = 1;
 
     private ProgressBar mProgressBar;
@@ -30,20 +32,28 @@ public class UserActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        UserStorageProvider provider = (UserStorageProvider) getApplication();
+        mUserStorage = provider.getUserStorage();
+
         setContentView(R.layout.activity_git_user);
 
+        mUserEditText = (EditText) findViewById(R.id.search_query);
+        mUserEditText.addTextChangedListener(new TextWatcherImpl())
+        ;
         mProgressBar = (ProgressBar) findViewById(R.id.progress);
+
         mButton = (Button) findViewById(R.id.find_user_button);
         mButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 mProgressBar.setVisibility(View.VISIBLE);
+                String query = mUserEditText.getText().toString();
+                User user = new User(query,"",0,"","");
+                mUserStorage.updateUser(user);
                 getSupportLoaderManager().getLoader(USER_LOADER_ID).forceLoad();
             }
         });
-        mUserEditText = (EditText) findViewById(R.id.search_query);
-        mUserEditText.addTextChangedListener(new TextWatcherImpl());
 
         mLogin = (TextView) findViewById(R.id.login);
         mName = (TextView) findViewById(R.id.name);
@@ -58,16 +68,16 @@ public class UserActivity extends AppCompatActivity {
 
         @Override
         public Loader<User> onCreateLoader(int id, Bundle args) {
-            return new UserLoader(UserActivity.this);
+            return new UserLoader(UserActivity.this, mUserStorage);
         }
 
         @Override
         public void onLoadFinished(Loader<User> loader, User data) {
-            mLogin.setText(data.getLogin());
-            mName.setText(data.getName());
-            mId.setText(String.valueOf(data.getId()));
-            mLocation.setText(data.getLocation());
-            mType.setText(data.getType());
+            mLogin.setText(mUserStorage.getUser().getLogin());
+            mName.setText(mUserStorage.getUser().getName());
+            mId.setText(String.valueOf(mUserStorage.getUser().getId()));
+            mLocation.setText(mUserStorage.getUser().getLocation());
+            mType.setText(mUserStorage.getUser().getType());
 
             mProgressBar.setVisibility(View.GONE);
         }
