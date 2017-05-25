@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitUser</string>
+    <string name="find_user">Найти пользователя</string>
 </resources>

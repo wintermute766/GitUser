@@ -15,8 +15,6 @@ import java.io.IOException;
 
 public class UserLoader extends AsyncTaskLoader<User> {
 
-    private static final String TAG = "AsyncTaskLoader";
-
     private User mCachedResult;
 
     public UserLoader(Context context) {
@@ -46,7 +44,7 @@ public class UserLoader extends AsyncTaskLoader<User> {
             return user;
 
         } catch (IOException | JSONException e) {
-            Log.e(TAG, "load failed");
+            e.printStackTrace();
         }
         return null;
     }
