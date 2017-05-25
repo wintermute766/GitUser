@@ -5,18 +5,19 @@
     android:layout_height="match_parent"
     tools:context="ru.sberbank.learning.gituser.UserActivity">
 
+    <EditText
+        android:id="@+id/search_query"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"/>
+
     <Button
         android:id="@+id/find_user_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/find_user"
         android:enabled="false"
-        android:layout_alignParentBottom="true"/>
-
-    <EditText
-        android:id="@+id/search_query"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_below="@id/search_query"/>
 
     <ProgressBar
         android:id="@+id/progress"
